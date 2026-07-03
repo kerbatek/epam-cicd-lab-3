@@ -25,6 +25,10 @@ def branchLogo(String branch) {
 pipeline {
     agent any
 
+    tools {
+        nodejs 'nodejs'
+    }
+
     options {
         skipDefaultCheckout(true)
         timestamps()
