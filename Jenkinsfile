@@ -2,6 +2,14 @@ def branchPort(String branch) {
         branch == 'dev' ? '3001' : '3000'
 }
 
+def branchImage(String branch) {
+        branch == 'dev' ? 'nodedev:v1.0' : 'nodemain:v1.0'
+}
+
+def branchContainer(String branch) {
+        branch == 'dev' ? 'nodedev' : 'nodemain'
+}
+
 def branchLogo(String branch) {
         if (branch == 'dev') {
                 return '''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Dev logo">
@@ -35,10 +43,6 @@ pipeline {
         disableConcurrentBuilds()
     }
 
-    environment {
-        IMAGE_NAME = 'epam-cicd-lab-3'
-    }
-
     stages {
         stage('Checkout') {
             steps {
@@ -46,8 +50,8 @@ pipeline {
                 script {
                     env.APP_BRANCH = env.BRANCH_NAME ?: 'main'
                     env.APP_PORT = branchPort(env.APP_BRANCH)
-                    env.CONTAINER_NAME = "${env.IMAGE_NAME}-${env.APP_BRANCH}"
-                    env.IMAGE_TAG = "${env.IMAGE_NAME}:${env.APP_BRANCH}"
+                    env.CONTAINER_NAME = branchContainer(env.APP_BRANCH)
+                    env.IMAGE_TAG = branchImage(env.APP_BRANCH)
                 }
             }
         }
